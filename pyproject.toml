@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "circuitjs2schemdraw"
+version = "0.1.0"
+description = ""
+authors = ["Raspberry Pi <raspberrypisig@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pyleri = "^1.4.1"
+schemdraw = {extras = ["svgmath"], version = "^0.15"}
+ipykernel = "^6.19.4"
+
+[tool.poetry.dev-dependencies]
+jupyter = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
