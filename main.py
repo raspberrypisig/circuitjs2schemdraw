@@ -254,7 +254,7 @@ class wire(ElectricComponent):
 
 def getCoordinates(parsing_element):
     coords = parsing_element.split()
-    return [(coords[0], coords[1]), (coords[2], coords[3])]
+    return [(int(coords[0]), int(coords[1])), (int(coords[2]), int(coords[3]))]
 
 
 def getDirection(coords):
@@ -293,9 +293,7 @@ if __name__ == "__main__":
         component_name = start.element.name
         coordinates = start.children[1].string
         terminal_coords = getCoordinates(coordinates)
-        sorted_coordinates = sorted(
-            terminal_coords, key=lambda x: (int(x[0]), int(x[1]))
-        )
+        sorted_coordinates = sorted(terminal_coords, key=lambda x: (x[0], int(x[1])))
         start_coords, end_coords = sorted_coordinates
         return {
             "component_name": component_name,
@@ -307,9 +305,7 @@ if __name__ == "__main__":
 
     def find_left_corner_most(elements):
         leftcorner_most = elements[0]["sorted_coordinates"][0]
-        leftcorner_most_index = 0
-        # print(leftcorner_most)
-        for index, element in enumerate(elements[1:]):
+        for element in elements[1:]:
             sorted_coordinates = element["sorted_coordinates"]
             lowest_coordinate = sorted_coordinates[0]
             if lowest_coordinate == leftcorner_most:
@@ -318,11 +314,11 @@ if __name__ == "__main__":
             sorted_boo = sorted(boo, key=lambda x: (int(x[1]), int(x[0])))
             if boo != sorted_boo:
                 leftcorner_most = lowest_coordinate
-                leftcorner_most_index = index + 1
 
-        # print(leftcorner_most)
-        # print(leftcorner_most_index)
-        return elements[leftcorner_most_index]
+        return leftcorner_most
+
+    def draw_now(coords, lookup, done_elements):
+        print(coords)
 
     with open(input_file, "r") as f:
         f.readline()
@@ -339,5 +335,6 @@ if __name__ == "__main__":
 
     # print("------------elements--------------\n", elements_to_draw)
     # print("------------lookup----------------\n", lookup)
-    element = find_left_corner_most(elements_to_draw)
-    print("------------leftmost element------\n", element)
+    coords = find_left_corner_most(elements_to_draw)
+    print("------------corner most coord--------\n", coords)
+    elements_to_draw_now = draw_now(coords, elements_drawn, lookup)
