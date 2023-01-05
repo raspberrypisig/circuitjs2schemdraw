@@ -284,7 +284,7 @@ output_file = "out.svg"
 if __name__ == "__main__":
     grammar = CircuitJSGrammar()
 
-    lookup = {}
+    lookup = defaultdict(list)
     elements_to_draw = []
     elements_drawn = []
 
@@ -317,8 +317,11 @@ if __name__ == "__main__":
 
         return leftcorner_most
 
-    def draw_now(coords, lookup, done_elements):
+    def draw_now(coords, done_elements, lookup):
+        boo = lookup[coords]
         print(coords)
+        # print(boo[1])
+        print(len(boo))
 
     with open(input_file, "r") as f:
         f.readline()
@@ -330,8 +333,8 @@ if __name__ == "__main__":
                 component = parse_component(parsing_result)
                 # print(component)
                 elements_to_draw.append(component)
-                lookup[component["start_coords"]] = (component, "start")
-                lookup[component["end_coords"]] = (component, "end")
+                lookup[component["start_coords"]].append((component, "start"))
+                lookup[component["end_coords"]].append((component, "end"))
 
     # print("------------elements--------------\n", elements_to_draw)
     # print("------------lookup----------------\n", lookup)
