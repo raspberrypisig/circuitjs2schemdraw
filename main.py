@@ -303,6 +303,15 @@ if __name__ == "__main__":
             "end_coords": end_coords,
         }
 
+    def find_top_left_coord(coords):
+        result = coords[0]
+
+        for coord in coords[1:]:
+            boo = [result, coord]
+            sorted_boo = sorted(boo, key=lambda x: (x[1], x[0]))
+
+        return result
+
     def find_left_corner_most(elements):
         leftcorner_most = elements[0]["sorted_coordinates"][0]
         for element in elements[1:]:
@@ -316,6 +325,13 @@ if __name__ == "__main__":
                 leftcorner_most = lowest_coordinate
 
         return leftcorner_most
+
+    def coords_from_elements(elements):
+        coords = []
+        for element in elements:
+            coords.append(element["start_coords"])
+            coords.append(element["end_coords"])
+        return coords
 
     def draw_now(d, coords, done_elements, lookup):
         boo = lookup[coords]
@@ -351,7 +367,10 @@ if __name__ == "__main__":
     with schemdraw.Drawing(backend="svg", show=False, file=output_file) as d:
         # print("------------elements--------------\n", elements_to_draw)
         # print("------------lookup----------------\n", lookup)
-        coords = find_left_corner_most(elements_to_draw)
-        print("------------corner most coord--------\n", coords)
-        new_elements_drawn = draw_now(d, coords, elements_drawn, lookup)
-        print(new_elements_drawn)
+        new_coords = coords_from_elements(elements_to_draw)
+        top_left_coord = find_top_left_coord(new_coords)
+        print(top_left_coord)
+        # coords = find_left_corner_most(elements_to_draw)
+        # print("------------corner most coord--------\n", coords)
+        # new_elements_drawn = draw_now(d, coords, elements_drawn, lookup)
+        # print(new_elements_drawn)
