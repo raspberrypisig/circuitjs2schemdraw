@@ -320,8 +320,9 @@ if __name__ == "__main__":
                 leftcorner_most = lowest_coordinate
                 leftcorner_most_index = index + 1
 
-        print(leftcorner_most)
-        print(leftcorner_most_index)
+        # print(leftcorner_most)
+        # print(leftcorner_most_index)
+        return elements[leftcorner_most_index]
 
     with open(input_file, "r") as f:
         f.readline()
@@ -338,4 +339,5 @@ if __name__ == "__main__":
 
     # print("------------elements--------------\n", elements_to_draw)
     # print("------------lookup----------------\n", lookup)
-    find_left_corner_most(elements_to_draw)
+    element = find_left_corner_most(elements_to_draw)
+    print("------------leftmost element------\n", element)
