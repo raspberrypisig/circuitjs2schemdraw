@@ -280,13 +280,13 @@ def getDirection(coords):
 input_file = "tests/basic2.txt"
 output_file = "out.svg"
 
-lookup = {}
-elements_to_draw = []
-elements_drawn = []
-
 
 if __name__ == "__main__":
     grammar = CircuitJSGrammar()
+
+    lookup = {}
+    elements_to_draw = []
+    elements_drawn = []
 
     def parse_component(parsing_result):
         start = parsing_result.tree.children[0].children[0]
@@ -305,6 +305,24 @@ if __name__ == "__main__":
             "end_coords": end_coords,
         }
 
+    def find_left_corner_most(elements):
+        leftcorner_most = elements[0]["sorted_coordinates"][0]
+        leftcorner_most_index = 0
+        # print(leftcorner_most)
+        for index, element in enumerate(elements[1:]):
+            sorted_coordinates = element["sorted_coordinates"]
+            lowest_coordinate = sorted_coordinates[0]
+            if lowest_coordinate == leftcorner_most:
+                continue
+            boo = [leftcorner_most, sorted_coordinates[0]]
+            sorted_boo = sorted(boo, key=lambda x: (int(x[1]), int(x[0])))
+            if boo != sorted_boo:
+                leftcorner_most = lowest_coordinate
+                leftcorner_most_index = index + 1
+
+        print(leftcorner_most)
+        print(leftcorner_most_index)
+
     with open(input_file, "r") as f:
         f.readline()
         for line in f:
@@ -318,8 +336,6 @@ if __name__ == "__main__":
                 lookup[component["start_coords"]] = (component, "start")
                 lookup[component["end_coords"]] = (component, "end")
 
-    print("------------elements--------------\n", elements_to_draw)
-    print("------------lookup----------------\n", lookup)
-# print(grammar.parse('r 240 80 448 80 0 10').is_valid)
-# res = grammar.parse('r 240 80 448 80 0 10')
-# print(json.dumps(view_parse_tree(res), indent=2))
+    # print("------------elements--------------\n", elements_to_draw)
+    # print("------------lookup----------------\n", lookup)
+    find_left_corner_most(elements_to_draw)
