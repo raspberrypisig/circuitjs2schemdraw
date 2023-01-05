@@ -298,7 +298,7 @@ if __name__ == "__main__":
         return {
             "component_name": component_name,
             "terminal_coords": terminal_coords,
-            "sorted_coordinates": sorted_coordinates,
+            "sorted_coords": sorted_coordinates,
             "start_coords": start_coords,
             "end_coords": end_coords,
         }
@@ -338,18 +338,24 @@ if __name__ == "__main__":
         print(coords)
         # print(boo[1])
         print(len(boo))
-        now_coord = d.here
+        endpoints = []
         for element, anchor in boo:
             if element not in done_elements:
-                # d.move(now_coord)
+                d.push()
                 print(element["component_name"])
                 print(anchor)
                 component = component_warehouse[element["component_name"]]()
-                c = component.getElement()
+                direction = getDirection(element["sorted_coords"])
+                c = getattr(component.getElement(), direction)
                 print(c)
                 d += c
+                d.pop()
+                if anchor == "start":
+                    endpoints.append(element["end_coords"])
+                else:
+                    endpoints.append(element["start_coords"])
 
-        return boo
+        return endpoints
 
     with open(input_file, "r") as f:
         f.readline()
@@ -372,5 +378,5 @@ if __name__ == "__main__":
         print(top_left_coord)
         # coords = find_left_corner_most(elements_to_draw)
         # print("------------corner most coord--------\n", coords)
-        # new_elements_drawn = draw_now(d, coords, elements_drawn, lookup)
-        # print(new_elements_drawn)
+        new_elements_drawn = draw_now(d, top_left_coord, elements_drawn, lookup)
+        print(new_elements_drawn)
