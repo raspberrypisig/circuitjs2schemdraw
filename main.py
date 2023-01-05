@@ -309,6 +309,8 @@ if __name__ == "__main__":
         for coord in coords[1:]:
             boo = [result, coord]
             sorted_boo = sorted(boo, key=lambda x: (x[1], x[0]))
+            if not boo == sorted_boo:
+                result = coord
 
         return result
 
@@ -335,19 +337,19 @@ if __name__ == "__main__":
 
     def draw_now(d, coords, done_elements, lookup):
         boo = lookup[coords]
-        print(coords)
+        # print(coords)
         # print(boo[1])
-        print(len(boo))
+        # print(len(boo))
         endpoints = []
         for element, anchor in boo:
             if element not in done_elements:
                 d.push()
-                print(element["component_name"])
-                print(anchor)
+                # print(element["component_name"])
+                # print(anchor)
                 component = component_warehouse[element["component_name"]]()
                 direction = getDirection(element["sorted_coords"])
                 c = getattr(component.getElement(), direction)
-                print(c)
+                # print(c)
                 d += c
                 d.pop()
                 if anchor == "start":
@@ -373,10 +375,15 @@ if __name__ == "__main__":
     with schemdraw.Drawing(backend="svg", show=False, file=output_file) as d:
         # print("------------elements--------------\n", elements_to_draw)
         # print("------------lookup----------------\n", lookup)
-        new_coords = coords_from_elements(elements_to_draw)
+        new_coords = list(set(coords_from_elements(elements_to_draw)))
+        print(new_coords)
         top_left_coord = find_top_left_coord(new_coords)
         print(top_left_coord)
         # coords = find_left_corner_most(elements_to_draw)
         # print("------------corner most coord--------\n", coords)
         new_elements_drawn = draw_now(d, top_left_coord, elements_drawn, lookup)
+        elements_drawn = elements_drawn + new_elements_drawn
+        new_coords.remove(top_left_coord)
+        print(new_coords)
         print(new_elements_drawn)
+        print(elements_drawn)
