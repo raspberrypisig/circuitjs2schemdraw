@@ -317,11 +317,23 @@ if __name__ == "__main__":
 
         return leftcorner_most
 
-    def draw_now(coords, done_elements, lookup):
+    def draw_now(d, coords, done_elements, lookup):
         boo = lookup[coords]
         print(coords)
         # print(boo[1])
         print(len(boo))
+        now_coord = d.here
+        for element, anchor in boo:
+            if element not in done_elements:
+                # d.move(now_coord)
+                print(element["component_name"])
+                print(anchor)
+                component = component_warehouse[element["component_name"]]()
+                c = component.getElement()
+                print(c)
+                d += c
+
+        return boo
 
     with open(input_file, "r") as f:
         f.readline()
@@ -336,8 +348,10 @@ if __name__ == "__main__":
                 lookup[component["start_coords"]].append((component, "start"))
                 lookup[component["end_coords"]].append((component, "end"))
 
-    # print("------------elements--------------\n", elements_to_draw)
-    # print("------------lookup----------------\n", lookup)
-    coords = find_left_corner_most(elements_to_draw)
-    print("------------corner most coord--------\n", coords)
-    elements_to_draw_now = draw_now(coords, elements_drawn, lookup)
+    with schemdraw.Drawing(backend="svg", show=False, file=output_file) as d:
+        # print("------------elements--------------\n", elements_to_draw)
+        # print("------------lookup----------------\n", lookup)
+        coords = find_left_corner_most(elements_to_draw)
+        print("------------corner most coord--------\n", coords)
+        new_elements_drawn = draw_now(d, coords, elements_drawn, lookup)
+        print(new_elements_drawn)
