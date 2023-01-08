@@ -3,7 +3,7 @@
 #
 
 from enum import Enum
-from point import TerminalPoint
+from point import Point
 from schemdraw import Drawing
 from visitor import Visitor
 
@@ -19,7 +19,7 @@ class ElectronicComponent(object):
     
     id: int = 1
 
-    def __init__(self, start_terminal: TerminalPoint, end_terminal: TerminalPoint) -> None:
+    def __init__(self, start_terminal: Point, end_terminal: Point) -> None:
         self._start_terminal = start_terminal
         self._end_terminal = end_terminal
     
@@ -28,11 +28,11 @@ class ElectronicComponent(object):
         return self.__name__
 
     @property
-    def start_terminal(self) -> TerminalPoint:
+    def start_terminal(self) -> Point:
         return self._start_terminal
 
     @property
-    def end_terminal(self) -> TerminalPoint:
+    def end_terminal(self) -> Point:
         return self._end_terminal
 
     @property
@@ -115,6 +115,17 @@ class ElectronicComponent(object):
     @property
     def shouldReverse(self) -> bool:
         return False  
+
+    @property
+    def anchors(self) -> list[str]:
+        return ["start", "end"]
+
+    @property
+    def anchors_dict(self):
+        return {
+            "start": self._start_terminal, 
+            "end":  self._end_terminal,
+        }    
 
     def accept(self, d: Drawing, v: Visitor):
         return v.visit_any(d, self)
