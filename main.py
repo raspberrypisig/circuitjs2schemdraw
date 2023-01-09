@@ -1,23 +1,14 @@
 
 from collections import defaultdict
 import schemdraw
-from visitor import SchemDrawVisitor
-from circuitjsgrammar import CircuitJSGrammar
-from point import Point
+from src.visitor import SchemDrawVisitor
+from src.circuitjsgrammar import CircuitJSGrammar
+from src.point import Point
 
 schemdraw.use('svg')
 schemdraw.svgconfig.text = 'path'
 schemdraw.svgconfig.svg2 = False
 schemdraw.svgconfig.precision = 2
-
-class DrawingState:
-    def __init__(self) -> None:
-        self._lookup = defaultdict(list)
-        self._elements_to_draw = []
-        self._elements_drawn = []
-        self._candidate_coords = []
-        self._drawn_list = {}
-        self._number_of_elements = 0
 
 def main(input_file: str, output_file: str) -> None:
     visitor = SchemDrawVisitor()

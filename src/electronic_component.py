@@ -2,10 +2,12 @@
 # Base class for components
 #
 
+from dataclasses import dataclass
 from enum import Enum
-from point import Point
+from typing import List, Optional
 from schemdraw import Drawing
-from visitor import Visitor
+from .visitor import Visitor
+from .point import Point
 
 # All components in 
 
@@ -15,25 +17,36 @@ class Direction(Enum):
   left = "left"
   right = "right"
 
+# A component that represents a CircuitJS element
+@dataclass
+class CircuitJSComponent:
+    component_name: str
+    anchors: List[str]
+    anchors_coords: List[Point]
+    value: Optional[float]
+
+@dataclass
+class ComponentManifest:
+    component: CircuitJSComponent
+    shouldFlip: bool
+    shouldReverse: bool
+    directionMapping: List[Direction]
+
+defaultDirectionMapping: List[Direction] = [Direction.up, Direction.down, Direction.left, Direction.right]
+
 class ElectronicComponent(object):
     
     id: int = 1
 
-    def __init__(self, start_terminal: Point, end_terminal: Point) -> None:
-        self._start_terminal = start_terminal
-        self._end_terminal = end_terminal
+    def __init__(self, component_name: str, start_coord: Point, end_coord: Point, value: Optional[float] = None) -> None:
+        self._component_name: str = component_name
+        self._start_coord: Point = start_coord
+        self._end_coord: Point = end_coord
+        self.value: Optional[float] = value
     
     @property
     def name(self) -> str:
         return self.__name__
-
-    @property
-    def start_terminal(self) -> Point:
-        return self._start_terminal
-
-    @property
-    def end_terminal(self) -> Point:
-        return self._end_terminal
 
     @property
     def hasValue(self) -> bool:
@@ -50,6 +63,7 @@ class ElectronicComponent(object):
     #    sorted_coordinates = sorted(terminal_coords, key=lambda x: (x[0], int(x[1])))
     #    return sorted_coordinates
 
+    '''
     def _direction(self) -> Direction:
         x1,y1 = self._start_terminal.x, self._start_terminal.y
         #x1, y1 = self._start_coords
@@ -69,6 +83,8 @@ class ElectronicComponent(object):
                 return Direction.left
             case _:
                 return Direction.up
+
+    '''
 
     '''
     def _direction_terminal(self):
@@ -108,25 +124,24 @@ class ElectronicComponent(object):
             case _:
                 return "up"          
     '''
+    '''
     @property
     def direction(self) -> Direction:
         return self._direction()      
+    '''
 
     @property
     def shouldReverse(self) -> bool:
         return False  
 
     @property
-    def anchors(self) -> list[str]:
-        return ["start", "end"]
+    def shouldFlip(self) -> bool:
+        return False  
 
     @property
-    def anchors_dict(self):
-        return {
-            "start": self._start_terminal, 
-            "end":  self._end_terminal,
-        }    
+    def component_manifest(self) -> None:
+        pass
 
-    def accept(self, d: Drawing, v: Visitor):
+    def accept(self, d: Drawing, v: Visitor) -> None:
         return v.visit_any(d, self)
 

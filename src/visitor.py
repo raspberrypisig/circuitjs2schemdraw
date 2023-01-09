@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 from schemdraw import Drawing
-from electronic_component import ElectronicComponent
+from .electronic_component import ElectronicComponent
 
 class Visitor(ABC):
     @abstractmethod

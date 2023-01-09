@@ -6,19 +6,15 @@
 from enum import Enum
 import schemdraw.elements as elm
 
-
-from component_warehouse import component_warehouse
-from electronic_component import ElectronicComponent
-
-
-
+from .component_warehouse import component_warehouse
+from .electronic_component import ElectronicComponent
 
 #
 # Generic components
 #
 
 class TwoTerminalComponent(ElectronicComponent):
-    def setValue(self, parsing_element):
+    def setValue(self, parsing_element: Any) -> None:
         self._value = parsing_element[3].string
         print(self._value)
         
@@ -150,6 +146,8 @@ class wire(ElectronicComponent):
     @property
     def hasLabel(self):
         return False
+
+
 
 
 
