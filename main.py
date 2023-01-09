@@ -22,7 +22,7 @@ class DrawingState:
 def main(input_file: str, output_file: str) -> None:
     visitor = SchemDrawVisitor()
     grammar = CircuitJSGrammar()
-    drawing_state = 
+    drawing_state = DrawingState()
     
     with open(input_file, "r") as f:
         f.readline()
