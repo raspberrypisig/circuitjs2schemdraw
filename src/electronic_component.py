@@ -4,9 +4,9 @@
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Optional
+from typing import Any, List, Optional
 from schemdraw import Drawing
-from .visitor import Visitor
+#from .visitor import Visitor
 from .point import Point
 
 # All components in 
@@ -142,6 +142,6 @@ class ElectronicComponent(object):
     def component_manifest(self) -> None:
         pass
 
-    def accept(self, d: Drawing, v: Visitor) -> None:
+    def accept(self, d: Drawing, v: Any) -> None:
         return v.visit_any(d, self)
 

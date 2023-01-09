@@ -1,30 +1,20 @@
-
-from collections import defaultdict
 import schemdraw
-from src.visitor import SchemDrawVisitor
-from src.circuitjsgrammar import CircuitJSGrammar
-from src.point import Point
+from src.circuitjs_to_schemdraw import circuitjs_to_schemdraw
 
-schemdraw.use('svg')
-schemdraw.svgconfig.text = 'path'
-schemdraw.svgconfig.svg2 = False
-schemdraw.svgconfig.precision = 2
+# default backend
+def use_matplotlib_backend() -> None:
+    pass
 
-def main(input_file: str, output_file: str) -> None:
-    visitor = SchemDrawVisitor()
-    grammar = CircuitJSGrammar()
-    drawing_state = DrawingState()
-    
-    with open(input_file, "r") as f:
-        f.readline()
-        for line in f:            
-            parsing_result = grammar.parse(line)
-            #print(parsing_result.is_valid)
-            if parsing_result.is_valid:
-                pass
+def use_svg_backend():
+    schemdraw.use('svg')
+    schemdraw.svgconfig.text = 'path'
+    schemdraw.svgconfig.svg2 = False
+    schemdraw.svgconfig.precision = 2
 
 if __name__ == "__main__":
-    main("tests/test001.txt", "out/test001.svg")   
+    #use_matplotlib_backend()
+    use_svg_backend()
+    circuitjs_to_schemdraw("tests/test001.txt", "out/test001.svg")   
 '''
 max_test_number = 5
 for i in range(max_test_number):

@@ -1,8 +1,7 @@
 
 
 
-
-from src.electronic_component import ElectronicComponent
+from .electronic_component import ElectronicComponent
 
 
 class ComponentWarehouse:
@@ -20,3 +19,5 @@ class ComponentWarehouse:
         return self.classes[n]
 
 component_warehouse = ComponentWarehouse()
+
+
