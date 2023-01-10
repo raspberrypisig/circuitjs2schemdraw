@@ -15,6 +15,7 @@ if __name__ == "__main__":
     #use_matplotlib_backend()
     use_svg_backend()
     circuitjs_to_schemdraw("tests/test001.txt", "out/test001.svg")   
+    
 '''
 max_test_number = 5
 for i in range(max_test_number):
