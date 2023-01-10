@@ -5,15 +5,15 @@ from pyleri import (
     Keyword,
     Regex,
     Repeat,
-    Ref,
     Sequence)
 
-
 class CircuitJSGrammar(Grammar):
-    START = Ref()
+    #START = Ref()
     
     number_literal = Regex('[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?')
-    two_terminal_coords = Repeat(number_literal, mi=4, ma=4)
+    start_terminal_coords = Repeat(number_literal, mi=2, ma=2)
+    end_terminal_coords = Repeat(number_literal, mi=2, ma=2)
+    two_terminal_coords = Sequence(start_terminal_coords, end_terminal_coords)
     booly = Choice(Keyword('true'), Keyword('false'))
     string_literal = Regex('[A-Za-z0-9_]+') 
 
@@ -30,7 +30,7 @@ class CircuitJSGrammar(Grammar):
     START = Choice(capacitor, ground, inductor, npntransistor, pchannelmosfet, resistor, switch, voltage, wire)
 
 
-    def _create_simple_node(self, tree) -> None:
+    def _create_simple_node(self, tree) -> dict[str, str]:
         return {
             "name": tree.element.name if hasattr(tree.element, 'name') else None,
             "element": tree.element.__class__.__name__,
@@ -63,4 +63,15 @@ class CircuitJSGrammar(Grammar):
         return None
         
         
-    
+    def extract(self, parsing_result):
+        component_name: Optional[str] =  self.find(parsing_result.tree, search={"element": "Sequence"}, result_field="name")    
+        #print(component_name)
+
+        start_terminal = self.find(parsing_result.tree, search={"name": "start_terminal_coords"}, result_field="string").split(" ")
+        end_terminal =   self.find(parsing_result.tree, search={"name": "end_terminal_coords"}, result_field="string").split(" ")
+      
+        return component_name, list(map(int, start_terminal)),  list(map(int, end_terminal))
+        
+
+        
+

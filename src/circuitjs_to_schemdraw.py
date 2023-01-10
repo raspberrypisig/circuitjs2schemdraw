@@ -1,10 +1,21 @@
 
 
+from dataclasses import dataclass
 from typing import Optional
 from .drawing_state import DrawingState
 from .circuitjsgrammar import CircuitJSGrammar
 from .visitor import SchemDrawVisitor
+from .point import Point
 
+@dataclass
+class ComponentManifest:
+    component_name: str
+    start_coords: Point
+    end_coords: Point
+    value: Optional[float]
+
+def create_component_manifest(component_name:str, start_coords: Point, end_coords: Point, value: Optional[float] = None) -> ComponentManifest:    
+    return ComponentManifest(component_name, start_coords, end_coords, value)
 
 def circuitjs_to_schemdraw(input_file: str, output_file: str) -> None:
     visitor = SchemDrawVisitor()
@@ -15,7 +26,8 @@ def circuitjs_to_schemdraw(input_file: str, output_file: str) -> None:
         f.readline()
         for line in f:            
             parsing_result = grammar.parse(line)
-            #print(parsing_result.is_valid)
             if parsing_result.is_valid:
-                circuitjs_component_name: Optional[str] =  grammar.find(parsing_result.tree, search={"element": "Sequence"}, result_field="name")    
-                print(circuitjs_component_name)
+                
+                component_name, start_terminal, end_terminal = grammar.extract(parsing_result)        
+                component = create_component_manifest(component_name, start_coords=Point(*start_terminal), end_coords=Point(*end_terminal))
+                print(component)
