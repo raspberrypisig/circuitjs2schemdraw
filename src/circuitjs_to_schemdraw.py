@@ -28,6 +28,6 @@ def circuitjs_to_schemdraw(input_file: str, output_file: str) -> None:
             parsing_result = grammar.parse(line)
             if parsing_result.is_valid:
                 
-                component_name, start_terminal, end_terminal = grammar.extract(parsing_result)        
-                component = create_component_manifest(component_name, start_coords=Point(*start_terminal), end_coords=Point(*end_terminal))
+                component_name, start_terminal, end_terminal, value_literal = grammar.extract(parsing_result)        
+                component = create_component_manifest(component_name, start_coords=Point(*start_terminal), end_coords=Point(*end_terminal), value=value_literal)
                 print(component)

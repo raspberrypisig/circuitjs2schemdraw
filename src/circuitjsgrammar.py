@@ -7,28 +7,26 @@ from pyleri import (
     Repeat,
     Sequence)
 
-class CircuitJSGrammar(Grammar):
-    #START = Ref()
-    
+class CircuitJSGrammar(Grammar): 
     number_literal = Regex('[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?')
     start_terminal_coords = Repeat(number_literal, mi=2, ma=2)
     end_terminal_coords = Repeat(number_literal, mi=2, ma=2)
     two_terminal_coords = Sequence(start_terminal_coords, end_terminal_coords)
     booly = Choice(Keyword('true'), Keyword('false'))
     string_literal = Regex('[A-Za-z0-9_]+') 
+    value_literal = Sequence(number_literal)
 
-    capacitor = Sequence(Keyword('c'), two_terminal_coords, number_literal, number_literal, Repeat(number_literal, mi=2, ma=2))
+    capacitor = Sequence(Keyword('c'), two_terminal_coords, number_literal, value_literal, Repeat(number_literal, mi=2, ma=2))
     ground = Sequence(Keyword('g'), two_terminal_coords, Repeat(number_literal, mi=2, ma=2))    
-    inductor = Sequence(Keyword('l'),  two_terminal_coords, number_literal, number_literal, Repeat(number_literal, mi=2, ma=2))
+    inductor = Sequence(Keyword('l'),  two_terminal_coords, number_literal, value_literal, Repeat(number_literal, mi=2, ma=2))
     npntransistor = Sequence(Keyword('t'), two_terminal_coords, Repeat(number_literal, mi=5, ma=5), string_literal)
     pchannelmosfet = Sequence(Keyword('f'), two_terminal_coords, Repeat(number_literal, mi=4, ma=4))
-    resistor = Sequence(Keyword('r'), two_terminal_coords, number_literal, number_literal)
+    resistor = Sequence(Keyword('r'), two_terminal_coords, number_literal, value_literal)
     switch = Sequence(Keyword('s'), two_terminal_coords, number_literal, number_literal, booly)
-    voltage = Sequence(Keyword('v'), two_terminal_coords, Repeat(number_literal, mi=3, ma=3), number_literal, Repeat(number_literal, mi=2, ma=2), number_literal)
+    voltage = Sequence(Keyword('v'), two_terminal_coords, Repeat(number_literal, mi=3, ma=3), value_literal, Repeat(number_literal, mi=2, ma=2), number_literal)
     wire = Sequence(Keyword('w'), two_terminal_coords, number_literal)
 
     START = Choice(capacitor, ground, inductor, npntransistor, pchannelmosfet, resistor, switch, voltage, wire)
-
 
     def _create_simple_node(self, tree) -> dict[str, str]:
         return {
@@ -51,8 +49,7 @@ class CircuitJSGrammar(Grammar):
             return None
 
         for child in tree.children:
-            simple_child_node = self._create_simple_node(child)
-            #mychild = {s: getattr(child, s) for s in child.__slots__ if hasattr(child, s)}
+            simple_child_node = self._create_simple_node(child)           
             if simple_child_node | search == simple_child_node:
                 return simple_child_node[result_field]
             else:
@@ -65,12 +62,16 @@ class CircuitJSGrammar(Grammar):
         
     def extract(self, parsing_result):
         component_name: Optional[str] =  self.find(parsing_result.tree, search={"element": "Sequence"}, result_field="name")    
-        #print(component_name)
-
+        
         start_terminal = self.find(parsing_result.tree, search={"name": "start_terminal_coords"}, result_field="string").split(" ")
         end_terminal =   self.find(parsing_result.tree, search={"name": "end_terminal_coords"}, result_field="string").split(" ")
-      
-        return component_name, list(map(int, start_terminal)),  list(map(int, end_terminal))
+        value_literal = self.find(parsing_result.tree, search={"name": "value_literal"}, result_field="string")
+        if value_literal:
+            component_value = value_literal.split().pop()
+        else:
+            component_value = None
+
+        return component_name, list(map(int, start_terminal)),  list(map(int, end_terminal)), component_value
         
 
         
