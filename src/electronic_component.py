@@ -44,6 +44,13 @@ class ElectronicComponent(object):
         self._end_coord: Point = end_coord
         self.value: Optional[float] = value
     
+    @classmethod
+    def anchors(cls, start_terminal, end_terminal):
+        return [
+            ("start", start_terminal),
+            ("end", end_terminal)
+        ]
+
     @property
     def name(self) -> str:
         return self.__name__

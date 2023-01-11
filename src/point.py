@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Self
 
-@dataclass
+@dataclass(frozen=True)
 class Point:
     x: float
     y: float

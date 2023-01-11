@@ -1,5 +1,6 @@
 
 
+from collections import defaultdict
 from dataclasses import dataclass
 from typing import List, Optional
 
@@ -24,9 +25,16 @@ def create_component_manifest(component_name:str, start_coords: Point, end_coord
 
 def create_lookup(component_manifests: List[ComponentManifest]):
     component_repo = component_repository()
-    
+    lookup = defaultdict(list)
+
     for component_manifest in component_manifests:
-        print(component_repo[component_manifest.component_name])
+        #print(component_repo[component_manifest.component_name])
+        element_class = component_repo[component_manifest.component_name]
+        anchors = element_class.anchors(component_manifest.start_coords, component_manifest.end_coords)
+        for anchor, terminal in anchors:
+            lookup[terminal].append(  (component_manifest, anchor) )
+
+    return lookup    
 
 
 def circuitjs_to_schemdraw(input_file: str, output_file: str) -> None:
@@ -47,5 +55,6 @@ def circuitjs_to_schemdraw(input_file: str, output_file: str) -> None:
     
     #print(component_manifests)
     lookup = create_lookup(component_manifests)
+    print(lookup)
 
     
