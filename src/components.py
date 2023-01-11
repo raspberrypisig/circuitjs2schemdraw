@@ -15,7 +15,7 @@ from .electronic_component import ElectronicComponent
 #
 
 class TwoTerminalComponent(ElectronicComponent):
-    def setValue(self, parsing_element: Any) -> None:
+    def setValue(self, parsing_element: any) -> None:
         self._value = float(parsing_element[3].string)
         print(self._value)
         
@@ -40,6 +40,7 @@ class ThreeTerminalComponent(ElectronicComponent):
 
 @component_warehouse.component
 class capacitor(TwoTerminalComponent):
+    classname = "capacitor"
     class Units(Enum):
         farads = "F"
         microfarads = "µF"
@@ -54,6 +55,7 @@ class capacitor(TwoTerminalComponent):
 
 @component_warehouse.component
 class ground(ElectronicComponent):
+    classname = "ground"
     def getElement(self) -> type:
         return elm.Ground
 
@@ -78,6 +80,7 @@ class ground(ElectronicComponent):
 
 @component_warehouse.component
 class inductor(TwoTerminalComponent):
+    classname = "inductor"
     class Units(Enum):
         henry = "H"
         millihenry = "mH"
@@ -88,16 +91,19 @@ class inductor(TwoTerminalComponent):
 
 @component_warehouse.component
 class npntransistor(TwoTerminalComponent):
+    classname = "npntransistor"
     def getElement(self) -> type:
         return elm.transistors.BjtNpn
 
 @component_warehouse.component
 class pchannelmosfet(TwoTerminalComponent):
+    classname = "pchannelmosfet"
     def getElement(self) -> type:
         return elm.transistors.PFet
 
 @component_warehouse.component
 class resistor(TwoTerminalComponent):
+    classname = "resistor"
     class Units(Enum):
         ohms = "Ω"
         killohms = "kΩ"
@@ -110,8 +116,11 @@ class resistor(TwoTerminalComponent):
     def labelPrefix(self) -> str:
         return "R"
 
+
+
 @component_warehouse.component
 class switch(TwoTerminalComponent):
+    classname = "switch"
     def getElement(self) -> type:
         return elm.Switch
 
@@ -125,6 +134,7 @@ class switch(TwoTerminalComponent):
 
 @component_warehouse.component
 class voltage(TwoTerminalDirectionalComponent):
+    classname = "voltage"
     class Units(Enum):
         volts = "V"
 
@@ -141,6 +151,7 @@ class voltage(TwoTerminalDirectionalComponent):
 
 @component_warehouse.component
 class wire(ElectronicComponent):
+    classname = "wire"
     def getElement(self) -> type:
         return elm.Line
 
