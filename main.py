@@ -1,5 +1,5 @@
 import schemdraw
-from src.circuitjs_to_schemdraw import circuitjs_to_schemdraw
+from src.circuitjs_to_schemdraw import CircuitJSToSchemDraw
 
 # default backend
 def use_matplotlib_backend() -> None:
@@ -14,8 +14,9 @@ def use_svg_backend():
 if __name__ == "__main__":
     #use_matplotlib_backend()
     use_svg_backend()
-    circuitjs_to_schemdraw("tests/test007.txt", "out/test007.svg")   
-    
+    #circuitjs_to_schemdraw("tests/test007.txt", "out/test007.svg")   
+    circuitjs_to_schemdraw = CircuitJSToSchemDraw(input_file="tests/test007.txt", output_file="out/test007.svg")
+    circuitjs_to_schemdraw.convert()
 '''
 max_test_number = 5
 for i in range(max_test_number):
