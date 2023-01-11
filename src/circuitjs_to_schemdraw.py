@@ -37,6 +37,13 @@ def create_lookup(component_manifests: List[ComponentManifest]):
     return lookup    
 
 
+def find_first(points):
+    result = points.pop()
+    for point in points:
+        if point < result:
+            result = point
+    return result
+
 def circuitjs_to_schemdraw(input_file: str, output_file: str) -> None:
     visitor = SchemDrawVisitor()
     grammar = CircuitJSGrammar()
@@ -55,6 +62,29 @@ def circuitjs_to_schemdraw(input_file: str, output_file: str) -> None:
     
     #print(component_manifests)
     lookup = create_lookup(component_manifests)
-    print(lookup)
+    #print(lookup)
+    lookup_terminal = find_first(list(lookup.keys()))
+    #print(first_terminal)
+    drawing_order = []
 
-    
+    drawn_anchors = []
+    candidate_anchors = set([])
+
+    print(f"number of items in components manifest: {len(component_manifests)}")
+    for i in range(1):
+        terminals = lookup[lookup_terminal]
+        for terminal in terminals:
+            drawing_order.append(terminal)
+            component_manifest, anchor = terminal
+            print(component_manifest)
+            print(anchor)
+            component_manifests.remove(component_manifest)
+            print(f"number of items in components manifest: {len(component_manifests)}")
+            #anchors = get_anchors(component_manifest)
+            # for other_anchor in anchors:
+            #     drawn_anchors.append(lookup_terminal)
+            #     candidate_anchors.append(anchors[other])
+            #     first_terminal = find_first(drawn_anchors)
+
+    print(drawing_order)
+
