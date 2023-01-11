@@ -43,12 +43,7 @@ class CircuitJSToSchemDraw:
 
 
     def find_first(self, points):
-        return sorted(points).pop()
-        #result = points.pop()
-        #for point in points:
-        #    if point < result:
-        #        result = point
-        #return result
+        return next(iter(sorted(points)))
 
     def other_anchors(self, component_manifest: ComponentManifest, excluded_anchor):
         element_class = self.circuitjs_element_class(component_manifest)
@@ -72,17 +67,15 @@ class CircuitJSToSchemDraw:
         lookup = self.create_lookup()
         #print(lookup)
         lookup_terminal = self.find_first(list(lookup.keys()))
-        print(lookup_terminal)
+        print("first", lookup_terminal)
         drawing_order = []
 
         drawn_anchors = []
         candidate_anchors = []
 
         #print(f"number of items in components manifest: {len(self.component_manifests)}")
-        for i in range(3):
+        for i in range(2):
             terminals = lookup[lookup_terminal]
-            if lookup_terminal in candidate_anchors:
-                candidate_anchors.remove(lookup_terminal)
             for terminal in terminals:
                 drawing_order.append(terminal)
                 component_manifest, anchor = terminal
@@ -92,10 +85,13 @@ class CircuitJSToSchemDraw:
                     drawn_anchors.append(lookup_terminal)
                     candidate_anchors.append(other_terminal)
                 #     first_terminal = find_first(drawn_anchors)
-
+            lookup_terminal = self.find_first(candidate_anchors)
+            print("next",lookup_terminal)
+            candidate_anchors.remove(lookup_terminal)
+            print(candidate_anchors)
         #print(drawing_order)
-        print(candidate_anchors)
-        lookup_terminal = self.find_first(candidate_anchors)
+        #print(candidate_anchors)
         
+       
 
 
