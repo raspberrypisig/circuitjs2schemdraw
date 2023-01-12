@@ -9,18 +9,14 @@ import schemdraw.elements as elm
 from .component_warehouse import component_warehouse
 from .electronic_component import ElectronicComponent
 from .schemdraw_manifest import SchemdrawElementManifest
-
+from .visitor import SchemDrawVisitor
 #
 # Generic components
 #
 
 class TwoTerminalComponent(ElectronicComponent):
-    def to_schemdraw_element(self):
-        element_class = self.schemdraw_element
-        print(element_class)
-    def setValue(self, parsing_element: any) -> None:
-        self._value = float(parsing_element[3].string)
-        print(self._value)
+    def to_schemdraw_element(self, visitor: SchemDrawVisitor):
+        return visitor.visit_any(self)    
         
 class TwoTerminalDirectionalComponent(TwoTerminalComponent):
     pass
@@ -120,8 +116,6 @@ class resistor(TwoTerminalComponent):
     def labelPrefix(self) -> str:
         return "R"
 
-
-
 @component_warehouse.component
 class switch(TwoTerminalComponent):
     classname = "switch"
@@ -154,7 +148,7 @@ class voltage(TwoTerminalDirectionalComponent):
         return True
 
 @component_warehouse.component
-class wire(ElectronicComponent):
+class wire(TwoTerminalComponent):
     classname = "wire"
     def schemdraw_element(self) -> type:
         return elm.Line
@@ -166,12 +160,4 @@ class wire(ElectronicComponent):
     @property
     def hasLabel(self) -> bool:
         return False
-
-    
-    def to_schemdraw_element(self):
-        pass
-
-    
-
-
 

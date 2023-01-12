@@ -14,7 +14,9 @@ class Visitor(ABC):
     #    pass
 
 class SchemDrawVisitor(Visitor):    
-    def visit_any(self, d, element):
+    def visit_any(self, component):
+        pass
+        '''
         d.push()
         element_args = {}
         element_args['d'] = element.direction
@@ -24,6 +26,6 @@ class SchemDrawVisitor(Visitor):
         d += c
         here = d.here
         d.pop()
-        return here
+        '''
 
 
