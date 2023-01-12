@@ -74,7 +74,8 @@ class CircuitJSToSchemDraw:
         candidate_anchors = []
 
         #print(f"number of items in components manifest: {len(self.component_manifests)}")
-        for i in range(len(lookup.keys())):
+        #for i in range(len(lookup.keys())):
+        while not len(self.component_manifests) == len(drawing_order):
             terminals = lookup[lookup_terminal]
             for terminal in terminals:                
                 component_manifest, anchor = terminal   
@@ -91,6 +92,7 @@ class CircuitJSToSchemDraw:
             candidate_anchors.remove(lookup_terminal)
             print("remaining anchors", candidate_anchors)
         print(drawing_order)
+        print(len(drawing_order))
         #print(candidate_anchors)
         
        
