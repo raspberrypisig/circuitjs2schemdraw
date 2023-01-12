@@ -61,13 +61,29 @@ class CircuitJSToSchemDraw:
                     component_manifest = self.create_component_manifest(component_name, start_coords=Point(*start_terminal), end_coords=Point(*end_terminal), value=value_literal)
                     self.component_manifests.append(component_manifest)
 
+    def visit(self, manifests):
+        schemdraw_elements = []
+        for manifest_group in manifests:
+            #print("push")
+            schemdraw_group = []
+            for component_manifest in manifest_group:
+                print(component_manifest)
+                # element_class = self.get_element_class(component_manifest)
+                # schemdraw_element = element_class().to_schemdraw_element(component_manifest)
+                # schemdraw_group.append(schemdraw_element)
+            #print("pop")
+            schemdraw_elements.append(schemdraw_group)
+
+    def draw(self):
+        pass
+
     def convert(self) -> None:
         self.parse_input_file()
         #print(component_manifests)
         lookup = self.create_lookup()
         #print(lookup)
         lookup_terminal = self.find_first(list(lookup.keys()))
-        print("first", lookup_terminal)
+        #print("first", lookup_terminal)
         drawing_order = []
 
         drawn_anchors = []
@@ -82,6 +98,7 @@ class CircuitJSToSchemDraw:
                 component_manifest, anchor = terminal   
                 if component_manifest in [item for sublist in drawing_order for item in sublist]:
                     continue
+
                 sub_drawing_order.append(component_manifest)                         
                 anchors = self.other_anchors(component_manifest, anchor)
                 for _, other_terminal in anchors:                    
@@ -90,13 +107,14 @@ class CircuitJSToSchemDraw:
                 #     first_terminal = find_first(drawn_anchors)
             drawing_order.append(sub_drawing_order)
             lookup_terminal = self.find_first(candidate_anchors)
-            print("next",lookup_terminal)
+            #print("next",lookup_terminal)
             candidate_anchors.remove(lookup_terminal)
-            print("remaining anchors", candidate_anchors)
-        print(drawing_order)
-        print(len(drawing_order))
+            #print("remaining anchors", candidate_anchors)
+        #print(drawing_order)
+        #print(len(drawing_order))
         #print(candidate_anchors)
-        
+        self.visit(drawing_order)
+        self.draw()        
        
 
 
