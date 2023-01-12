@@ -14,7 +14,34 @@ from .visitor import SchemDrawVisitor
 # Generic components
 #
 
+class Direction(Enum):
+  up = "up"
+  down = "down"
+  left = "left"
+  right = "right"
+
+
 class TwoTerminalComponent(ElectronicComponent):
+    def _direction(self):
+        diff_x = self.start_coords.x - self.end_coords.x
+        diff_y = self.end_coords.y - self.end_coords.y
+
+        match (diff_x, diff_y):
+            case (0, diff_y) if diff_y < 0:
+                return Direction.down
+            case (0, diff_y) if diff_y > 0:
+                return Direction.up
+            case (diff_x, 0) if diff_x < 0:
+                return Direction.right
+            case (diff_x, 0) if diff_x > 0:
+                return Direction.left
+            case _:
+                return Direction.up
+
+    @property
+    def schemdraw_args(self):
+        return {"d":self._direction()}
+
     def to_schemdraw_element(self, visitor: SchemDrawVisitor):
         return visitor.visit_any(self)    
         

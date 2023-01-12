@@ -3,6 +3,7 @@
 from abc import ABC, abstractmethod
 from schemdraw import Drawing
 from .electronic_component import ElectronicComponent
+from .schemdraw_manifest import SchemdrawElementManifest
 
 class Visitor(ABC):
     @abstractmethod
@@ -15,12 +16,14 @@ class Visitor(ABC):
 
 class SchemDrawVisitor(Visitor):    
     def visit_any(self, component):        
-        print(component)
-        element = component.schemdraw_element
-        #args = component.schemdraw_args
-        #label_value = component.label_value
-        #label_id = component.label_id
-        print(element)
+        #print(component)
+        element = component.schemdraw_element   
+        args = component.schemdraw_args
+        #print(args)
+        label_value = component.label_value
+        return SchemdrawElementManifest(element, args)
+        #print(label_value)
+        #print(element)
         '''
         d.push()
         element_args = {}

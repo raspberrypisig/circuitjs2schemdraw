@@ -10,13 +10,6 @@ from schemdraw import Drawing
 from .point import Point
 from .schemdraw_manifest import SchemdrawElementManifest
 
-# All components in 
-
-class Direction(Enum):
-  up = "up"
-  down = "down"
-  left = "left"
-  right = "right"
 
 # A component that represents a CircuitJS element
 @dataclass
@@ -26,30 +19,41 @@ class CircuitJSComponent:
     anchors_coords: List[Point]
     value: Optional[float]
 
-@dataclass
-class ComponentManifest:
-    component: CircuitJSComponent
-    shouldFlip: bool
-    shouldReverse: bool
-    directionMapping: List[Direction]
+#@dataclass
+#class ComponentManifest:
+#    component: CircuitJSComponent
+#    shouldFlip: bool
+#    shouldReverse: bool
 
-defaultDirectionMapping: List[Direction] = [Direction.up, Direction.down, Direction.left, Direction.right]
-
-class ElectronicComponent(object):
-    
+class ElectronicComponent(object):    
     id: int = 1
 
     def __init__(self, component_manifest) -> None:
         self.start_coords = component_manifest.start_coords
-        self.end_coords: component_manifest.end_coords
+        self.end_coords = component_manifest.end_coords
         self.value = component_manifest.value
     
+    @property
+    def label_value(self):
+        return self.value
+
+    #@property
+    #def label_id(self):
+    #    return self.id
+
     @classmethod
     def anchors(cls, start_terminal, end_terminal):
         return [
             ("start", start_terminal),
             ("end", end_terminal)
         ]
+
+    @property
+    def end_anchors(self):
+        return ["end"]
+
+    def convert_coordinates(self, anchor, start_anchor_pos):
+        pass
 
     @property
     def name(self) -> str:
@@ -70,21 +74,6 @@ class ElectronicComponent(object):
     #    sorted_coordinates = sorted(terminal_coords, key=lambda x: (x[0], int(x[1])))
     #    return sorted_coordinates
 
-    def _direction(self):
-        diff_x = self.start_coords.x - self.end_coords.x
-        diff_y = self.end_coords.y - self.end_coords.y
-
-        match (diff_x, diff_y):
-            case (0, diff_y) if diff_y < 0:
-                return Direction.down
-            case (0, diff_y) if diff_y > 0:
-                return Direction.up
-            case (diff_x, 0) if diff_x < 0:
-                return Direction.right
-            case (diff_x, 0) if diff_x > 0:
-                return Direction.left
-            case _:
-                return Direction.up
 
     @property
     def shouldReverse(self) -> bool:
