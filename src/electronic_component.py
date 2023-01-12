@@ -8,6 +8,7 @@ from typing import Any, List, Optional
 from schemdraw import Drawing
 #from .visitor import Visitor
 from .point import Point
+from .schemdraw_manifest import SchemdrawElementManifest
 
 # All components in 
 
@@ -38,11 +39,10 @@ class ElectronicComponent(object):
     
     id: int = 1
 
-    def __init__(self, component_name: str, start_coord: Point, end_coord: Point, value: Optional[float] = None) -> None:
-        self._component_name: str = component_name
-        self._start_coord: Point = start_coord
-        self._end_coord: Point = end_coord
-        self.value: Optional[float] = value
+    def __init__(self, component_manifest) -> None:
+        self.start_coords = component_manifest.start_coords
+        self.end_coords: component_manifest.end_coords
+        self.value = component_manifest.value
     
     @classmethod
     def anchors(cls, start_terminal, end_terminal):

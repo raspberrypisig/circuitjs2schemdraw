@@ -24,7 +24,7 @@ class CircuitJSToSchemDraw:
     def create_component_manifest(self, component_name:str, start_coords: Point, end_coords: Point, value: Optional[float] = None) -> ComponentManifest:    
         return ComponentManifest(component_name, start_coords, end_coords, value)
 
-    def circuitjs_element_class(self, component_manifest):
+    def element_class(self, component_manifest):
         component_repo = component_repository()
         element_class = component_repo[component_manifest.component_name]
         return element_class
@@ -34,7 +34,7 @@ class CircuitJSToSchemDraw:
 
         for component_manifest in self.component_manifests:
             #print(component_repo[component_manifest.component_name])
-            element_class = self.circuitjs_element_class(component_manifest)
+            element_class = self.element_class(component_manifest)
             anchors = element_class.anchors(component_manifest.start_coords, component_manifest.end_coords)
             for anchor, terminal in anchors:
                 lookup[terminal].append(  (component_manifest, anchor) )
@@ -46,7 +46,7 @@ class CircuitJSToSchemDraw:
         return next(iter(sorted(points)))
 
     def other_anchors(self, component_manifest: ComponentManifest, excluded_anchor):
-        element_class = self.circuitjs_element_class(component_manifest)
+        element_class = self.element_class(component_manifest)
         anchors = element_class.anchors(component_manifest.start_coords, component_manifest.end_coords)        
         anchors = [(anchor,terminal) for anchor,terminal in anchors if not anchor == excluded_anchor]            
         return anchors
@@ -68,11 +68,12 @@ class CircuitJSToSchemDraw:
             schemdraw_group = []
             for component_manifest in manifest_group:
                 print(component_manifest)
-                # element_class = self.get_element_class(component_manifest)
-                # schemdraw_element = element_class().to_schemdraw_element(component_manifest)
+                element_class = self.element_class(component_manifest)
+                schemdraw_element = element_class(component_manifest).to_schemdraw_element()
                 # schemdraw_group.append(schemdraw_element)
             #print("pop")
             schemdraw_elements.append(schemdraw_group)
+        return schemdraw_elements
 
     def draw(self):
         pass

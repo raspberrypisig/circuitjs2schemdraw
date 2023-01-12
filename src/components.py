@@ -8,13 +8,16 @@ import schemdraw.elements as elm
 
 from .component_warehouse import component_warehouse
 from .electronic_component import ElectronicComponent
-
+from .schemdraw_manifest import SchemdrawElementManifest
 
 #
 # Generic components
 #
 
 class TwoTerminalComponent(ElectronicComponent):
+    def to_schemdraw_element(self):
+        element_class = self.schemdraw_element
+        print(element_class)
     def setValue(self, parsing_element: any) -> None:
         self._value = float(parsing_element[3].string)
         print(self._value)
@@ -46,7 +49,8 @@ class capacitor(TwoTerminalComponent):
         microfarads = "µF"
         picofarads = "pF"
 
-    def getElement(self) -> type:
+    @property
+    def schemdraw_element(self) -> type:
         return elm.Capacitor
 
     @property
@@ -56,7 +60,7 @@ class capacitor(TwoTerminalComponent):
 @component_warehouse.component
 class ground(ElectronicComponent):
     classname = "ground"
-    def getElement(self) -> type:
+    def schemdraw_element(self) -> type:
         return elm.Ground
 
     @property
@@ -86,19 +90,19 @@ class inductor(TwoTerminalComponent):
         millihenry = "mH"
         microhenry = "µH"
     
-    def getElement(self):
+    def schemdraw_element(self):
         return elm.Inductor
 
 @component_warehouse.component
 class npntransistor(TwoTerminalComponent):
     classname = "npntransistor"
-    def getElement(self) -> type:
+    def schemdraw_element(self) -> type:
         return elm.transistors.BjtNpn
 
 @component_warehouse.component
 class pchannelmosfet(TwoTerminalComponent):
     classname = "pchannelmosfet"
-    def getElement(self) -> type:
+    def schemdraw_element(self) -> type:
         return elm.transistors.PFet
 
 @component_warehouse.component
@@ -109,7 +113,7 @@ class resistor(TwoTerminalComponent):
         killohms = "kΩ"
         megaohms = "mΩ"
 
-    def getElement(self) -> type:
+    def schemdraw_element(self) -> type:
         return elm.Resistor
 
     @property
@@ -121,7 +125,7 @@ class resistor(TwoTerminalComponent):
 @component_warehouse.component
 class switch(TwoTerminalComponent):
     classname = "switch"
-    def getElement(self) -> type:
+    def schemdraw_element(self) -> type:
         return elm.Switch
 
     @property
@@ -138,7 +142,7 @@ class voltage(TwoTerminalDirectionalComponent):
     class Units(Enum):
         volts = "V"
 
-    def getElement(self) -> type:
+    def schemdraw_element(self) -> type:
         return elm.SourceV
 
     @property
@@ -152,7 +156,7 @@ class voltage(TwoTerminalDirectionalComponent):
 @component_warehouse.component
 class wire(ElectronicComponent):
     classname = "wire"
-    def getElement(self) -> type:
+    def schemdraw_element(self) -> type:
         return elm.Line
 
     @property
@@ -163,7 +167,11 @@ class wire(ElectronicComponent):
     def hasLabel(self) -> bool:
         return False
 
+    
+    def to_schemdraw_element(self):
+        pass
 
+    
 
 
 
