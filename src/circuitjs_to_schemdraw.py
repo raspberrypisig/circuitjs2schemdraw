@@ -75,18 +75,20 @@ class CircuitJSToSchemDraw:
 
         #print(f"number of items in components manifest: {len(self.component_manifests)}")
         #for i in range(len(lookup.keys())):
-        while not len(self.component_manifests) == len(drawing_order):
+        while not len(self.component_manifests) == len([item for sublist in drawing_order for item in sublist]):
             terminals = lookup[lookup_terminal]
+            sub_drawing_order = []
             for terminal in terminals:                
                 component_manifest, anchor = terminal   
-                if component_manifest in drawing_order:
+                if component_manifest in [item for sublist in drawing_order for item in sublist]:
                     continue
-                drawing_order.append(component_manifest)                         
+                sub_drawing_order.append(component_manifest)                         
                 anchors = self.other_anchors(component_manifest, anchor)
-                for _, other_terminal in anchors:
+                for _, other_terminal in anchors:                    
                     drawn_anchors.append(lookup_terminal)
                     candidate_anchors.append(other_terminal)
                 #     first_terminal = find_first(drawn_anchors)
+            drawing_order.append(sub_drawing_order)
             lookup_terminal = self.find_first(candidate_anchors)
             print("next",lookup_terminal)
             candidate_anchors.remove(lookup_terminal)
