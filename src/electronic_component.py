@@ -70,14 +70,9 @@ class ElectronicComponent(object):
     #    sorted_coordinates = sorted(terminal_coords, key=lambda x: (x[0], int(x[1])))
     #    return sorted_coordinates
 
-    '''
-    def _direction(self) -> Direction:
-        x1,y1 = self._start_terminal.x, self._start_terminal.y
-        #x1, y1 = self._start_coords
-        x2,y2 = self._end_terminal.x, self._end_terminal.y
-        #x2, y2 = self._end_coords
-        diff_x = x1 - x2
-        diff_y = y1 - y2
+    def _direction(self):
+        diff_x = self.start_coords.x - self.end_coords.x
+        diff_y = self.end_coords.y - self.end_coords.y
 
         match (diff_x, diff_y):
             case (0, diff_y) if diff_y < 0:
@@ -91,52 +86,6 @@ class ElectronicComponent(object):
             case _:
                 return Direction.up
 
-    '''
-
-    '''
-    def _direction_terminal(self):
-        x1, y1 = self._terminal_start_coords
-        x2, y2 = self._terminal_end_coords
-        diff_x = x1 - x2
-        diff_y = y1 - y2
-
-        match (diff_x, diff_y):
-            case (0, diff_y) if diff_y < 0:
-                return "down"
-            case (0, diff_y) if diff_y > 0:
-                return "up"
-            case (diff_x, 0) if diff_x < 0:
-                return "right"
-            case (diff_x, 0) if diff_x > 0:
-                return "left"
-            case _:
-                return "up"   
-    '''
-    '''
-    def _direction_original(self):
-        x1, y1 = self._start_coords
-        x2, y2 = self._end_coords
-        diff_x = x1 - x2
-        diff_y = y1 - y2
-
-        match (diff_x, diff_y):
-            case (0, diff_y) if diff_y < 0:
-                return "down"
-            case (0, diff_y) if diff_y > 0:
-                return "up"
-            case (diff_x, 0) if diff_x < 0:
-                return "right"
-            case (diff_x, 0) if diff_x > 0:
-                return "left"
-            case _:
-                return "up"          
-    '''
-    '''
-    @property
-    def direction(self) -> Direction:
-        return self._direction()      
-    '''
-
     @property
     def shouldReverse(self) -> bool:
         return False  
@@ -145,10 +94,4 @@ class ElectronicComponent(object):
     def shouldFlip(self) -> bool:
         return False  
 
-    @property
-    def component_manifest(self) -> None:
-        pass
-
-    def accept(self, d: Drawing, v: Any) -> None:
-        return v.visit_any(d, self)
 

@@ -67,7 +67,7 @@ class CircuitJSToSchemDraw:
             #print("push")
             schemdraw_group = []
             for component_manifest in manifest_group:
-                print(component_manifest)
+                #print(component_manifest)
                 element_class = self.element_class(component_manifest)
                 schemdraw_element = element_class(component_manifest).to_schemdraw_element(self.visitor)
                 # schemdraw_group.append(schemdraw_element)

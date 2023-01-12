@@ -14,8 +14,13 @@ class Visitor(ABC):
     #    pass
 
 class SchemDrawVisitor(Visitor):    
-    def visit_any(self, component):
-        pass
+    def visit_any(self, component):        
+        print(component)
+        element = component.schemdraw_element
+        #args = component.schemdraw_args
+        #label_value = component.label_value
+        #label_id = component.label_id
+        print(element)
         '''
         d.push()
         element_args = {}
