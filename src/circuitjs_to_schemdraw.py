@@ -64,7 +64,7 @@ class CircuitJSToSchemDraw:
 
     def visit(self, manifests):
         schemdraw_elements = []
-        for manifest_group in manifests:
+        for coord, manifest_group in manifests:
             #print("push")
             schemdraw_group = []
             for component_manifest in manifest_group:
@@ -73,7 +73,7 @@ class CircuitJSToSchemDraw:
                 schemdraw_element = element_class(component_manifest).to_schemdraw_element(self.visitor)
                 schemdraw_group.append(schemdraw_element)
             #print("pop")
-            schemdraw_elements.append(schemdraw_group)
+            schemdraw_elements.append((coord, schemdraw_group))
         return schemdraw_elements
 
     def draw(self, elements):
@@ -81,16 +81,15 @@ class CircuitJSToSchemDraw:
         draw_lookup = {}
 
         with schemdraw.Drawing(file=self.output_file, show=False) as d:
-            for element in elements:
-                
-                for component in element:
-                    
+            for lookup_terminal, element in elements:                
+                if lookup_terminal in draw_lookup:
+                    here = draw_lookup[lookup_terminal]
+                    d.move(here.x, here.y)
+                for component in element:                    
                     start_coord = component.start_coord
-                    if start_coord in draw_lookup:
-                        here = draw_lookup[start_coord]
-                        d.move(here.x, here.y)
+
                     end_coord = component.end_coord
-                    print(start_coord, end_coord)                    
+                    #print(start_coord, end_coord)                    
                     d.push()
                     print("what value now:", d.here)
                     c = component.element_class()                    
@@ -118,12 +117,12 @@ class CircuitJSToSchemDraw:
 
         #print(f"number of items in components manifest: {len(self.component_manifests)}")
         #for i in range(len(lookup.keys())):
-        while not len(self.component_manifests) == len([item for sublist in drawing_order for item in sublist]):
+        while not len(self.component_manifests) == len([item for _, sublist in drawing_order for item in sublist]):
             terminals = lookup[lookup_terminal]
             sub_drawing_order = []
             for terminal in terminals:                
                 component_manifest, anchor = terminal   
-                if component_manifest in [item for sublist in drawing_order for item in sublist]:
+                if component_manifest in [item for _, sublist in drawing_order for item in sublist]:
                     continue
 
                 sub_drawing_order.append(component_manifest)                         
@@ -132,7 +131,7 @@ class CircuitJSToSchemDraw:
                     drawn_anchors.append(lookup_terminal)
                     candidate_anchors.append(other_terminal)
                 #     first_terminal = find_first(drawn_anchors)
-            drawing_order.append(sub_drawing_order)
+            drawing_order.append((lookup_terminal, sub_drawing_order))
             lookup_terminal = self.find_first(candidate_anchors)
             #print("next",lookup_terminal)
             candidate_anchors.remove(lookup_terminal)
