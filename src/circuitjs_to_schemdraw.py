@@ -77,25 +77,29 @@ class CircuitJSToSchemDraw:
         return schemdraw_elements
 
     def draw(self, elements):
-        #print(self.output_file)
-        #print(elements)
+
+        draw_lookup = {}
+
         with schemdraw.Drawing(file=self.output_file, show=False) as d:
             for element in elements:
                 for component in element:
-                    c = component.element_class()
-                    dir = component.constructor_args['d']
-                    print(dir)
-                    print(type(c))
-                    print(type(c) == type)
-                    #print(dir(c))
+                    start_coord = component.start_coord
+                    if start_coord in draw_lookup:
+                        here = draw_lookup[start_coord]
+                        d.move(here.x, here.y)
+                    end_coord = component.end_coord
+                    print(start_coord, end_coord)                    
+                    d.push()
+                    c = component.element_class()                    
                     if type(c) == type:
-                        #d += c().right()
                         d += component.element_class()(**component.constructor_args)
                     else:
                         d += component.element_class(**component.constructor_args)
-                        #d += c.right()
-                    #d += component.element_class(**component.constructor_args)
-
+                    
+                    draw_lookup[component.end_coord] =  d.here
+                    d.pop()
+        print(draw_lookup)            
+                    
 
     def convert(self) -> None:
         self.parse_input_file()

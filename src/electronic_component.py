@@ -60,9 +60,15 @@ class ElectronicComponent(object):
             
     def get_end_coord(self):
         if self.start_coords < self.end_coords:
+          return self.end_coords
+        else:
+          return self.start_coords
+
+    def get_start_coord(self):
+        if self.start_coords < self.end_coords:
           return self.start_coords
         else:
-          return self.end_coords
+          return self.end_coords    
 
     def convert_coordinates(self, anchor, start_anchor_pos):
         pass
