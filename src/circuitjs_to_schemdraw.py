@@ -3,6 +3,7 @@
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import List, Optional
+import schemdraw
 
 from .component_warehouse import component_repository
 from .drawing_state import DrawingState
@@ -70,13 +71,31 @@ class CircuitJSToSchemDraw:
                 #print(component_manifest)
                 element_class = self.element_class(component_manifest)
                 schemdraw_element = element_class(component_manifest).to_schemdraw_element(self.visitor)
-                # schemdraw_group.append(schemdraw_element)
+                schemdraw_group.append(schemdraw_element)
             #print("pop")
             schemdraw_elements.append(schemdraw_group)
         return schemdraw_elements
 
-    def draw(self):
-        pass
+    def draw(self, elements):
+        #print(self.output_file)
+        #print(elements)
+        with schemdraw.Drawing(file=self.output_file, show=False) as d:
+            for element in elements:
+                for component in element:
+                    c = component.element_class()
+                    dir = component.constructor_args['d']
+                    print(dir)
+                    print(type(c))
+                    print(type(c) == type)
+                    #print(dir(c))
+                    if type(c) == type:
+                        #d += c().right()
+                        d += component.element_class()(**component.constructor_args)
+                    else:
+                        d += component.element_class(**component.constructor_args)
+                        #d += c.right()
+                    #d += component.element_class(**component.constructor_args)
+
 
     def convert(self) -> None:
         self.parse_input_file()
@@ -114,8 +133,9 @@ class CircuitJSToSchemDraw:
         #print(drawing_order)
         #print(len(drawing_order))
         #print(candidate_anchors)
-        self.visit(drawing_order)
-        self.draw()        
+        elements = self.visit(drawing_order)
+        #print(elements)
+        self.draw(elements)        
        
 
 

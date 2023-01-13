@@ -17,13 +17,13 @@ class Visitor(ABC):
 class SchemDrawVisitor(Visitor):    
     def visit_any(self, component):        
         #print(component)
-        element = component.schemdraw_element   
+        element_class = component.schemdraw_element   
         args = component.schemdraw_args
         other_anchors = component.other_anchors
         end_coord = component.get_end_coord()
         #print(end_coord)
         label_value = component.label_value
-        return SchemdrawElementManifest(element, args, other_anchors, end_coord)
+        return SchemdrawElementManifest(element_class, args, other_anchors, end_coord)
         '''
         d.push()
         element_args = {}

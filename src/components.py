@@ -28,15 +28,15 @@ class TwoTerminalComponent(ElectronicComponent):
 
         match (diff_x, diff_y):
             case (0, diff_y) if diff_y < 0:
-                return Direction.down
+                return "down"
             case (0, diff_y) if diff_y > 0:
-                return Direction.up
+                return "up"
             case (diff_x, 0) if diff_x < 0:
-                return Direction.right
+                return "right"
             case (diff_x, 0) if diff_x > 0:
-                return Direction.left
+                return "left"
             case _:
-                return Direction.up
+                return "up"
 
     @property
     def schemdraw_args(self):
