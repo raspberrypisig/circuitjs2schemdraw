@@ -19,11 +19,11 @@ class SchemDrawVisitor(Visitor):
         #print(component)
         element = component.schemdraw_element   
         args = component.schemdraw_args
-        #print(args)
+        other_anchors = component.other_anchors
+        end_coord = component.get_end_coord()
+        #print(end_coord)
         label_value = component.label_value
-        return SchemdrawElementManifest(element, args)
-        #print(label_value)
-        #print(element)
+        return SchemdrawElementManifest(element, args, other_anchors, end_coord)
         '''
         d.push()
         element_args = {}

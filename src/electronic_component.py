@@ -52,6 +52,18 @@ class ElectronicComponent(object):
     def end_anchors(self):
         return ["end"]
 
+    @property
+    def other_anchors(self):
+        return [
+            {"end": Point(0.0, 0.0)}
+        ]
+            
+    def get_end_coord(self):
+        if self.start_coords < self.end_coords:
+          return self.start_coords
+        else:
+          return self.end_coords
+
     def convert_coordinates(self, anchor, start_anchor_pos):
         pass
 
