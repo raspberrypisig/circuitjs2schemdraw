@@ -82,7 +82,9 @@ class CircuitJSToSchemDraw:
 
         with schemdraw.Drawing(file=self.output_file, show=False) as d:
             for element in elements:
+                
                 for component in element:
+                    
                     start_coord = component.start_coord
                     if start_coord in draw_lookup:
                         here = draw_lookup[start_coord]
@@ -90,6 +92,7 @@ class CircuitJSToSchemDraw:
                     end_coord = component.end_coord
                     print(start_coord, end_coord)                    
                     d.push()
+                    print("what value now:", d.here)
                     c = component.element_class()                    
                     if type(c) == type:
                         d += component.element_class()(**component.constructor_args)

@@ -24,17 +24,19 @@ class Direction(Enum):
 class TwoTerminalComponent(ElectronicComponent):
     def _direction(self):
         diff_x = self.start_coords.x - self.end_coords.x
-        diff_y = self.end_coords.y - self.end_coords.y
+        diff_y = self.start_coords.y - self.end_coords.y
 
         match (diff_x, diff_y):
             case (0, diff_y) if diff_y < 0:
                 return "down"
             case (0, diff_y) if diff_y > 0:
-                return "up"
+                #return "up"
+                return "down"
             case (diff_x, 0) if diff_x < 0:
                 return "right"
             case (diff_x, 0) if diff_x > 0:
-                return "left"
+                #return "left"
+                return "right"
             case _:
                 return "up"
 
