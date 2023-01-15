@@ -22,10 +22,10 @@ class SchemDrawVisitor(Visitor):
         other_anchors = component.other_anchors
         start_coord = component.get_start_coord()
         end_coord = component.get_end_coord()
-        
+        has_length = component.has_length
         #print(end_coord)
         label_value = component.label_value
-        return SchemdrawElementManifest(element_class, args, other_anchors, start_coord, end_coord)
+        return SchemdrawElementManifest(element_class, args, other_anchors, start_coord, end_coord, has_length)
         '''
         d.push()
         element_args = {}

@@ -46,7 +46,12 @@ class TwoTerminalComponent(ElectronicComponent):
 
     def to_schemdraw_element(self, visitor: SchemDrawVisitor):
         return visitor.visit_any(self)    
-        
+
+class SingleTerminalComponent(TwoTerminalComponent):
+    @property
+    def has_length(self):
+        return False
+
 class TwoTerminalDirectionalComponent(TwoTerminalComponent):
     pass
     '''
@@ -83,7 +88,7 @@ class capacitor(TwoTerminalComponent):
         return "C"
 
 @component_warehouse.component
-class ground(ElectronicComponent):
+class ground(SingleTerminalComponent):
     classname = "ground"
     def schemdraw_element(self) -> type:
         return elm.Ground

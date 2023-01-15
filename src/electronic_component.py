@@ -32,7 +32,12 @@ class ElectronicComponent(object):
         self.start_coords = component_manifest.start_coords
         self.end_coords = component_manifest.end_coords
         self.value = component_manifest.value
+        
     
+    @property
+    def has_length(self):
+        return True
+
     @property
     def label_value(self):
         return self.value

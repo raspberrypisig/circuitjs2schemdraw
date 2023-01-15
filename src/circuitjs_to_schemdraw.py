@@ -116,11 +116,19 @@ class CircuitJSToSchemDraw:
                     #print(start_coord, end_coord)                    
                     d.push()
                     #print("what value now:", d.here)
-                    c = component.element_class()                    
+                    c = component.element_class()
+                    
                     if type(c) == type:
-                        d += component.element_class()(**component.constructor_args).at([current_point_x, current_point_y]).length(length)
+                        e = component.element_class()(**component.constructor_args)
+
                     else:
-                        d += component.element_class(**component.constructor_args).at([current_point_x, current_point_y]).length(length)
+                        e = component.element_class(**component.constructor_args)
+          
+                    if component.has_length:
+                        d += e.at([current_point_x, current_point_y]).length(length)
+                        
+                    else:
+                        d += e.at([current_point_x, current_point_y])
 
                     draw_lookup[component.end_coord] =  d.here
                     d.pop()
