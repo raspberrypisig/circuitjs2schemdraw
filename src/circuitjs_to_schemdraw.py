@@ -78,26 +78,50 @@ class CircuitJSToSchemDraw:
 
     def draw(self, elements):
 
+
+        starting_point,_ = elements[0]
+        print(starting_point)
+
+        scale_factor = 30.0
+        def drawing_coords(coord):
+            return ((coord.x - starting_point.x)/scale_factor, (starting_point.y - coord.y )/scale_factor)
+
+        def component_length(start_coord, end_coord):
+            diff_x = start_coord.x - end_coord.x
+            diff_y = start_coord.y - end_coord.y
+
+            match diff_x, diff_y:
+                case (0, _):
+                  return abs(diff_y)/scale_factor
+                case (_, 0):
+                  return abs(diff_x)/scale_factor
+                case _:
+                    return -1.0
+            #return abs(p1 - p2)/scale_factor
+
         draw_lookup = {}
 
         with schemdraw.Drawing(file=self.output_file, show=False) as d:
-            for lookup_terminal, element in elements:                
-                if lookup_terminal in draw_lookup:
-                    here = draw_lookup[lookup_terminal]
-                    d.move(here.x, here.y)
+            d.config(fontsize=14.0, lw=2)
+
+            for lookup_terminal, element in elements:
+                current_point_x, current_point_y = drawing_coords(lookup_terminal)
+                #if lookup_terminal in draw_lookup:
+                #    here = draw_lookup[lookup_terminal]
+                #    d.move(here.x, here.y)
                 for component in element:                    
                     start_coord = component.start_coord
-
                     end_coord = component.end_coord
+                    length = component_length(start_coord, end_coord)
                     #print(start_coord, end_coord)                    
                     d.push()
-                    print("what value now:", d.here)
+                    #print("what value now:", d.here)
                     c = component.element_class()                    
                     if type(c) == type:
-                        d += component.element_class()(**component.constructor_args)
+                        d += component.element_class()(**component.constructor_args).at([current_point_x, current_point_y]).length(length)
                     else:
-                        d += component.element_class(**component.constructor_args)
-                    
+                        d += component.element_class(**component.constructor_args).at([current_point_x, current_point_y]).length(length)
+
                     draw_lookup[component.end_coord] =  d.here
                     d.pop()
         print(draw_lookup)            
