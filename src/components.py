@@ -101,16 +101,14 @@ class ground(SingleTerminalComponent):
     def hasLabel(self) ->bool:
         return False
 
-    '''
-    @property
-    def direction(self):
-        element_direction = self._direction()
+    def _direction(self):
+        element_direction = super()._direction()
         match element_direction:
             case 'down':
                 return 'right'
             case _:
                 return element_direction
-    '''
+    
 
 @component_warehouse.component
 class inductor(TwoTerminalComponent):
