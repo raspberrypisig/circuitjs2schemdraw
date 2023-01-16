@@ -105,7 +105,7 @@ class CircuitJSToSchemDraw:
             d.config(fontsize=14.0, lw=2)
 
             for lookup_terminal, element in elements:
-                current_point_x, current_point_y = drawing_coords(lookup_terminal)
+                
                 #if lookup_terminal in draw_lookup:
                 #    here = draw_lookup[lookup_terminal]
                 #    d.move(here.x, here.y)
@@ -113,6 +113,7 @@ class CircuitJSToSchemDraw:
                     start_coord = component.start_coord
                     end_coord = component.end_coord
                     length = component_length(start_coord, end_coord)
+                    current_point_x, current_point_y = drawing_coords(start_coord)
                     #print(start_coord, end_coord)                    
                     d.push()
                     #print("what value now:", d.here)
