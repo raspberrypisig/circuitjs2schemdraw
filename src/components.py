@@ -3,8 +3,12 @@
 # Component Repository
 #
 
+from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 import schemdraw.elements as elm
+
+from .point import Point
 
 from .component_warehouse import component_warehouse
 from .electronic_component import ElectronicComponent
@@ -13,6 +17,12 @@ from .visitor import SchemDrawVisitor
 #
 # Generic components
 #
+
+@dataclass
+class Manifest:
+  start_coords: Point
+  end_coords: Point
+  value: Optional[float]
 
 class Direction(Enum):
   up = "up"
@@ -85,10 +95,38 @@ class TwoTerminalDirectionalComponent(TwoTerminalComponent):
             case _:
                 return False
     
+
+
 class ThreeTerminalComponent(TwoTerminalComponent):
     @property
     def has_length(self):
         return False
+
+    @property
+    def wire_length(self):
+        diff_x = self.start_coords.x - self.end_coords.x
+        diff_y = self.start_coords.y - self.end_coords.y
+
+        default_three_terminal_length = 22.5
+
+        match diff_x, diff_y:
+            case (0, diff_y):
+                return abs(diff_y) - default_three_terminal_length
+              
+            case (diff_x, 0):
+                return abs(diff_x) - default_three_terminal_length
+            case _:
+                return 0.0
+
+    @property
+    def anchor_coords(self):
+        wire_length = self.wire_length
+        start_coords = self.start_coords
+        wire_end = start_coords + Point(wire_length, 0.0)
+        return wire_length, wire_end
+
+    def to_schemdraw_element(self, visitor: SchemDrawVisitor):
+        return visitor.visit_three_terminal(self) 
 
 #
 # Specific components
@@ -205,6 +243,12 @@ class voltage(TwoTerminalDirectionalComponent):
 @component_warehouse.component
 class wire(TwoTerminalComponent):
     classname = "wire"
+
+    @classmethod
+    def fromargs(cls, start_coords, end_coords):
+        manifest = Manifest(start_coords, end_coords, None)
+        return cls(manifest)
+
     def schemdraw_element(self) -> type:
         return elm.Line
 

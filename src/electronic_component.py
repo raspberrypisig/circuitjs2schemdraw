@@ -25,9 +25,11 @@ class CircuitJSComponent:
 #    shouldFlip: bool
 #    shouldReverse: bool
 
+
+
 class ElectronicComponent(object):    
     id: int = 1
-
+ 
     def __init__(self, component_manifest) -> None:
         self.start_coords = component_manifest.start_coords
         self.end_coords = component_manifest.end_coords

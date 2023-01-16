@@ -12,7 +12,7 @@ class Point:
     def __lt__(self, o:Self) -> bool:
         return self.y < o.y or (self.y == o.y and self.x < o.x) 
 
-    def __add__self(self, o):
+    def __add__(self, o):
         return Point(self.x + o.x, self.y + o.y)
 
     

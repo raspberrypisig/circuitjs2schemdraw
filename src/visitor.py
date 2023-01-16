@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from schemdraw import Drawing
 from .electronic_component import ElectronicComponent
 from .schemdraw_manifest import SchemdrawElementManifest
+from .component_warehouse import component_warehouse
 
 class Visitor(ABC):
     @abstractmethod
@@ -25,17 +26,35 @@ class SchemDrawVisitor(Visitor):
         has_length = component.has_length
         #print(end_coord)
         label_value = component.label_value
-        return [SchemdrawElementManifest(element_class, args, other_anchors, start_coord, end_coord, has_length)]
-        '''
-        d.push()
-        element_args = {}
-        element_args['d'] = element.direction
-        if element.shouldReverse:
-            element_args["reverse"] = True
-        c = element.getElement()(**element_args)
-        d += c
-        here = d.here
-        d.pop()
-        '''
+        return [SchemdrawElementManifest(element_class, 
+        args, 
+        other_anchors, 
+        start_coord, 
+        end_coord, 
+        has_length)]
+
+    def visit_three_terminal(self, component) -> None:
+        wire_length, wire_end = component.anchor_coords
+        direction = component._direction()
+        wire_start = component.start_coords
+        component.start_coords = wire_end
+        three_terminal_component = self.visit_any(component)
+        wire = component_warehouse['wire'].fromargs(component.start_coords, wire_end)
+        
+        wire_element_class = wire.schemdraw_element   
+        wire_args = {"d": direction}
+        wire_other_anchors = wire.other_anchors
+        wire_start_coord = wire_start
+        wire_end_coord = wire.get_end_coord()
+        wire_has_length = wire.has_length        
+
+        wire_manifest = SchemdrawElementManifest(wire_element_class, 
+        wire_args, 
+        wire_other_anchors, 
+        wire_start_coord, 
+        wire_end_coord, 
+        wire_has_length
+        )
+        return [wire_manifest] + three_terminal_component
 
 
