@@ -40,6 +40,22 @@ class TwoTerminalComponent(ElectronicComponent):
             case _:
                 return "up"
 
+    def _direction_original(self):
+        diff_x = self.start_coords.x - self.end_coords.x
+        diff_y = self.start_coords.y - self.end_coords.y
+
+        match (diff_x, diff_y):
+            case (0, diff_y) if diff_y < 0:
+                return "down"
+            case (0, diff_y) if diff_y > 0:
+                return "up"                
+            case (diff_x, 0) if diff_x < 0:
+                return "right"
+            case (diff_x, 0) if diff_x > 0:
+                return "left"                
+            case _:
+                return "up"
+
     @property
     def schemdraw_args(self):
         return {"d":self._direction()}
@@ -53,17 +69,22 @@ class SingleTerminalComponent(TwoTerminalComponent):
         return False
 
 class TwoTerminalDirectionalComponent(TwoTerminalComponent):
-    pass
-    '''
+    @property
+    def schemdraw_args(self):        
+        return {
+            "d":self._direction(),
+            "reverse": self.shouldReverse
+        }
+    
     @property
     def shouldReverse(self):
-        direction = self._direction_terminal()
+        direction = self._direction_original()
         match direction:
             case 'up'|'left':
                 return True
             case _:
                 return False
-    '''
+    
 class ThreeTerminalComponent(ElectronicComponent):
     pass
 

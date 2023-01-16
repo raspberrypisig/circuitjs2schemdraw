@@ -14,7 +14,7 @@ def use_svg_backend():
 if __name__ == "__main__":
     #use_matplotlib_backend()
     use_svg_backend()
-    max_tests = 5
+    max_tests = 7
     for i in range(max_tests):
         circuitjs_to_schemdraw = CircuitJSToSchemDraw(input_file=f"tests/test00{i+1}.txt", output_file=f"out/test00{i+1}.svg")
         circuitjs_to_schemdraw.convert()
