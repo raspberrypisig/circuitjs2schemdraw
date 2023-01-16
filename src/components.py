@@ -85,8 +85,10 @@ class TwoTerminalDirectionalComponent(TwoTerminalComponent):
             case _:
                 return False
     
-class ThreeTerminalComponent(ElectronicComponent):
-    pass
+class ThreeTerminalComponent(TwoTerminalComponent):
+    @property
+    def has_length(self):
+        return False
 
 #
 # Specific components
@@ -143,13 +145,13 @@ class inductor(TwoTerminalComponent):
         return elm.Inductor
 
 @component_warehouse.component
-class npntransistor(TwoTerminalComponent):
+class npntransistor(ThreeTerminalComponent):
     classname = "npntransistor"
     def schemdraw_element(self) -> type:
         return elm.transistors.BjtNpn
 
 @component_warehouse.component
-class pchannelmosfet(TwoTerminalComponent):
+class pchannelmosfet(ThreeTerminalComponent):
     classname = "pchannelmosfet"
     def schemdraw_element(self) -> type:
         return elm.transistors.PFet
