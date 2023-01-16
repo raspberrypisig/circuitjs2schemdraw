@@ -71,7 +71,8 @@ class CircuitJSToSchemDraw:
                 #print(component_manifest)
                 element_class = self.element_class(component_manifest)
                 schemdraw_element = element_class(component_manifest).to_schemdraw_element(self.visitor)
-                schemdraw_group.append(schemdraw_element)
+                schemdraw_group = schemdraw_group + schemdraw_element
+                #schemdraw_group.append(schemdraw_element)
             #print("pop")
             schemdraw_elements.append((coord, schemdraw_group))
         return schemdraw_elements

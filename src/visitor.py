@@ -25,7 +25,7 @@ class SchemDrawVisitor(Visitor):
         has_length = component.has_length
         #print(end_coord)
         label_value = component.label_value
-        return SchemdrawElementManifest(element_class, args, other_anchors, start_coord, end_coord, has_length)
+        return [SchemdrawElementManifest(element_class, args, other_anchors, start_coord, end_coord, has_length)]
         '''
         d.push()
         element_args = {}
