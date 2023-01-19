@@ -1,26 +1,25 @@
-from schemdraw.elements import Element2Term
+from schemdraw.elements import Element2Term, Element
 from schemdraw import Segment, SegmentCircle, SegmentArrow
 import math
 
 gap = (math.nan, math.nan)
 
-total_width = 2.0
+total_width = 1.0
 #total_width = 1.0
-total_height = 2.0
+total_height = 1.5
 arrow_height = 0.7
-y_offset = 0.0
-arrow_bottom = arrow_height + y_offset
-drain_to_gate = total_width / 4.0
+arrow_bottom = arrow_height
+drain_to_gate = total_width / 2.0
 gate_to_source = drain_to_gate
 drain_to_source = drain_to_gate + gate_to_source
 lead_length = (total_width - drain_to_source)/2.0
-drain_x = lead_length
+drain_x = 0.0
 gate_x = drain_x + drain_to_gate
 source_x = drain_x + drain_to_source
 half_leg = 0.1
 gate_gap = 0.3
 
-class PChannelMOSFET(Element2Term):
+class PChannelMOSFET(Element):
     ''' P-type Field Effect Transistor which extends
         source/drain leads to the desired length
 
@@ -43,12 +42,11 @@ class PChannelMOSFET(Element2Term):
         self.segments.append(Segment([(2.1, -y_offset), (2.1, -arrow_bottom) ]))
         self.segments.append(Segment([(2.0, -arrow_bottom), (2.2, -arrow_bottom) ])) 
         '''
-        self.segments.append(Segment([(0.0, -y_offset), (drain_x, -y_offset), gap, (gate_x, -y_offset), (3.0, -y_offset)]))
-        self.segments.append(Segment([(drain_x, -y_offset), (drain_x, -arrow_bottom) ]))
+        self.segments.append(Segment([(drain_x, 0.0),(drain_x,-arrow_bottom), gap, (gate_x, 0.0), (source_x, 0.0)]))        
         self.segments.append(Segment([(drain_x - half_leg, -arrow_bottom), (drain_x + half_leg, -arrow_bottom) ]))
-        self.segments.append(Segment([(gate_x, -arrow_bottom), (gate_x, -y_offset) ], arrow=">"))
+        self.segments.append(Segment([(gate_x, -arrow_bottom), (gate_x, 0.0) ], arrow=">"))
         self.segments.append(Segment([(gate_x - half_leg, -arrow_bottom), (gate_x + half_leg, -arrow_bottom) ]))
-        self.segments.append(Segment([(source_x, -y_offset), (source_x, -arrow_bottom) ]))
+        self.segments.append(Segment([(source_x, 0.0), (source_x, -arrow_bottom) ]))
         self.segments.append(Segment([(source_x - half_leg, -arrow_bottom), (source_x + half_leg, -arrow_bottom) ]))                
         self.segments.append(Segment([(drain_x + half_leg, -arrow_bottom - gate_gap), (source_x - half_leg, -arrow_bottom - gate_gap)]))
         self.segments.append(Segment([(gate_x, -arrow_bottom - gate_gap), (gate_x, -total_height)]))
