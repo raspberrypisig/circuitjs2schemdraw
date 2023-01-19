@@ -33,8 +33,7 @@ class CircuitJSToSchemDraw:
     def create_lookup(self):
         lookup = defaultdict(list)
 
-        for component_manifest in self.component_manifests:
-            #print(component_repo[component_manifest.component_name])
+        for component_manifest in self.component_manifests:            
             element_class = self.element_class(component_manifest)
             anchors = element_class.anchors(component_manifest.start_coords, component_manifest.end_coords)
             for anchor, terminal in anchors:
@@ -116,16 +115,14 @@ class CircuitJSToSchemDraw:
                     d.pop()
         
                     
-    def convert(self) -> None:
+    def convert2(self) -> None:
         self.parse_input_file()    
         lookup = self.create_lookup()
         lookup_keys = list(lookup.keys())   
         lookup_terminal = self.find_top_leftmost(lookup_keys)        
         drawing_order = []
         drawn_anchors = []
-        candidate_anchors = []
-
-        #while not len(self.component_manifests) == len([item for _, sublist in drawing_order for item in sublist]):
+                
         while len(lookup_keys) > 0:
             terminals = lookup[lookup_terminal]
             sub_drawing_order = []
@@ -136,16 +133,37 @@ class CircuitJSToSchemDraw:
                 sub_drawing_order.append(component_manifest)                         
                 anchors = self.other_anchors(component_manifest, anchor)
                 for _, other_terminal in anchors:                    
-                    drawn_anchors.append(lookup_terminal)
-                    #candidate_anchors.append(other_terminal)             
+                    drawn_anchors.append(lookup_terminal)                              
             drawing_order.append((lookup_terminal, sub_drawing_order))
             lookup_keys.remove(lookup_terminal)
             if len(lookup_keys) == 0:
                 break
-            lookup_terminal = self.find_top_leftmost(lookup_keys)
-            #candidate_anchors.remove(lookup_terminal)
+            lookup_terminal = self.find_top_leftmost(lookup_keys)            
         elements = self.visit(drawing_order)
         self.draw(elements)        
        
 
 
+    def convert(self) -> None:
+        self.parse_input_file()
+        lookup = self.create_lookup()
+        lookup_keys = list(lookup.keys())
+        lookup_terminal = self.find_top_leftmost(lookup_keys)
+        drawing_order = []        
+        while lookup_keys:
+            terminals = lookup[lookup_terminal]
+            sub_drawing_order = [
+                component_manifest
+                for terminal in terminals
+                for component_manifest, anchor in (terminal,)
+                if component_manifest not in (
+                    item
+                    for _, sublist in drawing_order
+                    for item in sublist
+                )
+            ]
+            drawing_order.append((lookup_terminal, sub_drawing_order))
+            lookup_keys.remove(lookup_terminal)
+            lookup_terminal = self.find_top_leftmost(lookup_keys) if lookup_keys else None
+        elements = self.visit(drawing_order)
+        self.draw(elements)
