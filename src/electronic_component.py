@@ -44,17 +44,6 @@ class ElectronicComponent(object):
     def label_value(self):
         return self.value
 
-    #@property
-    #def label_id(self):
-    #    return self.id
-
-    @classmethod
-    def anchors(cls, start_terminal, end_terminal):
-        return [
-            ("start", start_terminal),
-            ("end", end_terminal)
-        ]
-
     @property
     def end_anchors(self):
         return ["end"]

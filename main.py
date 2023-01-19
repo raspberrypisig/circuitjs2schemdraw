@@ -11,17 +11,20 @@ def use_svg_backend():
     schemdraw.svgconfig.svg2 = False
     schemdraw.svgconfig.precision = 2
 
-if __name__ == "__main__":
-    #use_matplotlib_backend()
-    use_svg_backend()
-    
-    '''
-    max_tests = 8
+def all_tests():
+    max_tests = 9
     for i in range(max_tests):
         circuitjs_to_schemdraw = CircuitJSToSchemDraw(input_file=f"tests/test00{i+1}.txt", output_file=f"out/test00{i+1}.svg")
         circuitjs_to_schemdraw.convert()
-    '''
-    circuitjs_to_schemdraw = CircuitJSToSchemDraw(input_file="tests/test009b.txt", output_file="out/test009b.svg")
-    circuitjs_to_schemdraw.convert()
+
+def one_test():
+    circuitjs_to_schemdraw = CircuitJSToSchemDraw(input_file="tests/test003.txt", output_file="out/test003.svg")
+    circuitjs_to_schemdraw.convert()    
+
+if __name__ == "__main__":
+    use_matplotlib_backend()
+    #use_svg_backend()
     
+    all_tests()
+    #one_test()
 

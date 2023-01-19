@@ -32,6 +32,13 @@ class Direction(Enum):
 
 
 class TwoTerminalComponent(ElectronicComponent):
+    @classmethod
+    def anchors(cls, start_terminal, end_terminal):
+        return [
+            ("start", start_terminal),
+            ("end", end_terminal)
+        ]
+
     def _direction(self):
         diff_x = self.start_coords.x - self.end_coords.x
         diff_y = self.start_coords.y - self.end_coords.y
@@ -74,6 +81,12 @@ class TwoTerminalComponent(ElectronicComponent):
         return visitor.visit_any(self)    
 
 class SingleTerminalComponent(TwoTerminalComponent):
+    @classmethod
+    def anchors(cls, start_terminal, end_terminal):
+        return [
+            ("start", start_terminal)            
+        ]
+
     @property
     def has_length(self):
         return False
