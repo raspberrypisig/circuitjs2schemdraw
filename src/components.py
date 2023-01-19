@@ -14,6 +14,7 @@ from .component_warehouse import component_warehouse
 from .electronic_component import ElectronicComponent
 from .schemdraw_manifest import SchemdrawElementManifest
 from .visitor import SchemDrawVisitor
+from .pchannelmosfet import PChannelMOSFET
 #
 # Generic components
 #
@@ -204,8 +205,27 @@ class npntransistor(ThreeTerminalComponent):
 @component_warehouse.component
 class pchannelmosfet(ThreeTerminalComponent):
     classname = "pchannelmosfet"
+    
+    def _direction(self):
+        return "right"
+
     def schemdraw_element(self) -> type:
-        return elm.transistors.PFet
+        return PChannelMOSFET
+        #return elm.transistors.PFet
+
+    @property
+    def wire_length(self):
+        return 0.0
+
+    @property
+    def wire_direction(self):
+        return 'down'
+
+    def get_start_coord(self):
+        if self.start_coords < self.end_coords:
+          return self.start_coords + Point(-16.0, 0.0)
+        else:
+          return self.end_coords + Point(-16.0, 0.0)
 
 @component_warehouse.component
 class resistor(TwoTerminalComponent):
