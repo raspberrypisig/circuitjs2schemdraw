@@ -20,7 +20,7 @@ class CircuitJSGrammar(Grammar):
     ground = Sequence(Keyword('g'), two_terminal_coords, Repeat(number_literal, mi=2, ma=2))    
     inductor = Sequence(Keyword('l'),  two_terminal_coords, number_literal, value_literal, Repeat(number_literal, mi=2, ma=2))
     npntransistor = Sequence(Keyword('t'), two_terminal_coords, Repeat(number_literal, mi=5, ma=5), string_literal)
-    pchannelmosfet = Sequence(Keyword('f'), two_terminal_coords, Repeat(number_literal, mi=4, ma=4))
+    pchannelmosfet = Sequence(Keyword('f'), two_terminal_coords, Repeat(number_literal, mi=3, ma=3))
     resistor = Sequence(Keyword('r'), two_terminal_coords, number_literal, value_literal)
     switch = Sequence(Keyword('s'), two_terminal_coords, number_literal, number_literal, booly)
     voltage = Sequence(Keyword('v'), two_terminal_coords, Repeat(number_literal, mi=3, ma=3), value_literal, Repeat(number_literal, mi=2, ma=2), number_literal)
