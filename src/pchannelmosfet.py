@@ -4,7 +4,8 @@ import math
 
 gap = (math.nan, math.nan)
 
-total_width = 3.0
+total_width = 2.0
+#total_width = 1.0
 total_height = 2.0
 arrow_height = 0.7
 y_offset = 0.0

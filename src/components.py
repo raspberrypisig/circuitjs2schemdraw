@@ -225,7 +225,13 @@ class pchannelmosfet(ThreeTerminalComponent):
         if self.start_coords < self.end_coords:
           return self.start_coords + Point(-16.0, 0.0)
         else:
-          return self.end_coords + Point(-16.0, 0.0)
+          return self.end_coords + Point(-16.0, 10.0)
+
+    def get_end_coord(self):
+        if self.start_coords < self.end_coords:
+          return self.end_coords + Point(-16.0, -16.0)
+        else:
+          return self.end_coords + Point(-16.0, -16.0)
 
 @component_warehouse.component
 class resistor(TwoTerminalComponent):
