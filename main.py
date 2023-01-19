@@ -18,13 +18,13 @@ def all_tests():
         circuitjs_to_schemdraw.convert()
 
 def one_test():
-    circuitjs_to_schemdraw = CircuitJSToSchemDraw(input_file="tests/test003.txt", output_file="out/test003.svg")
+    circuitjs_to_schemdraw = CircuitJSToSchemDraw(input_file="tests/test010.txt", output_file="out/test010.svg")
     circuitjs_to_schemdraw.convert()    
 
 if __name__ == "__main__":
     use_matplotlib_backend()
     #use_svg_backend()
     
-    all_tests()
-    #one_test()
+    #all_tests()
+    one_test()
 
