@@ -39,23 +39,23 @@ class SchemDrawVisitor(Visitor):
         #wire_start = component.start_coords
         #component.start_coords = wire_end
         three_terminal_component = self.visit_any(component)
-        #wire = component_warehouse['wire'].fromargs(component.start_coords, wire_end)
+        wire = component_warehouse['wire'].fromargs(component.wire_start_coords, component.wire_end_coords)
         
-        #wire_element_class = wire.schemdraw_element   
-        #wire_args = {"d": direction}
-        #wire_other_anchors = wire.other_anchors
-        #wire_start_coord = wire_start
-        #wire_end_coord = wire.get_end_coord()
-        #wire_has_length = wire.has_length        
+        wire_element_class = wire.schemdraw_element   
+        wire_args = {"d": "down"}
+        wire_other_anchors = wire.other_anchors
+        wire_start_coord = component.wire_start_coords
+        wire_end_coord = component.wire_end_coords
+        wire_has_length = wire.has_length        
 
-        #wire_manifest = SchemdrawElementManifest(wire_element_class, 
-        #wire_args, 
-        #wire_other_anchors, 
-        #wire_start_coord, 
-        #wire_end_coord, 
-        #wire_has_length
-        #)
-        #return [wire_manifest] + three_terminal_component
-        return three_terminal_component
+        wire_manifest = SchemdrawElementManifest(wire_element_class, 
+        wire_args, 
+        wire_other_anchors, 
+        wire_start_coord, 
+        wire_end_coord, 
+        wire_has_length
+        )
+        return  three_terminal_component + [wire_manifest] 
+        #return three_terminal_component
 
 

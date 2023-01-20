@@ -215,7 +215,16 @@ class pchannelmosfet(ThreeTerminalComponent):
 
     @property
     def wire_length(self):
-        return 0.0
+        return abs(self.start_coords.y - self.end_coords.y) - 48.0
+        
+    @property
+    def wire_start_coords(self):
+        return Point(335.0 + 1.0, 221.0)
+
+    @property
+    def wire_end_coords(self):
+        return Point(335.0 + 1.0, 269.0+16.0+3.0)
+
 
     @property
     def wire_direction(self):
@@ -232,6 +241,19 @@ class pchannelmosfet(ThreeTerminalComponent):
           return self.end_coords + Point(-16.0, -16.0)
         else:
           return self.end_coords + Point(-16.0, -16.0)
+
+    @property
+    def anchor_coords(self):
+        wire_length = 48.0
+        #start_coords = self.start_coords + Point(0.0, -24.0)
+        start_coords = Point(336.0, 250.0)
+        wire_end = Point(336.0, 298.0)
+        #wire_end = start_coords + Point(0.0, 24.0)
+        #wire_length = self.wire_length
+        #start_coords = self.start_coords
+        #wire_end = start_coords + Point(0.0, 48.0)
+        return wire_length, wire_end
+        
 
 @component_warehouse.component
 class resistor(TwoTerminalComponent):
